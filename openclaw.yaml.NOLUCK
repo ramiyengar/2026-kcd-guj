@@ -1,0 +1,8 @@
+apiVersion: openclaw.rocks/v1alpha1
+kind: OpenClawInstance
+metadata:
+  name: local-agent
+  namespace: openclaw
+spec:
+  selfConfigure:
+    enabled: true

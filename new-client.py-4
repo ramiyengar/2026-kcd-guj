@@ -1,0 +1,59 @@
+import asyncio
+import httpx
+
+async def main():
+    server_url = "http://localhost:8081" 
+    print(f"Connecting to OpenCost MCP server at {server_url}...")
+
+    # 1. The strict transport headers you identified
+    headers = {
+        "Content-Type": "application/json",
+        "Accept": "application/json, text/event-stream",
+        "User-Agent": "MCP-Python-Client/1.0",
+        "Origin": "http://localhost:8081"
+    }
+
+    # 2. The proper JSON-RPC 2.0 wrapped structure
+    payload = {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "method": "tools/call",
+        "params": {
+            "name": "get_allocation_costs",
+            "arguments": {
+                "window": "7d",
+                "aggregate": "namespace"
+            }
+        }
+    }
+
+    try:
+        # 3. Direct HTTP POST (Bypassing the SSE wrapper)
+        async with httpx.AsyncClient() as client:
+            print("Executing tool: get_allocation_costs")
+            response = await client.post(
+                server_url, 
+                headers=headers, 
+                json=payload,
+                timeout=30.0
+            )
+            
+            response.raise_for_status()
+            data = response.json()
+            
+            if "error" in data:
+                print(f"\nMCP Server Error: {data['error']}")
+            else:
+                print("\nCost Result:")
+                # MCP tool responses are nested in result -> content
+                for content in data.get("result", {}).get("content", []):
+                    print(content.get("text", ""))
+
+    except httpx.HTTPStatusError as e:
+        print(f"\nHTTP Error: {e.response.status_code}")
+        print(f"Server Response Body: {e.response.text}")
+    except Exception as e:
+        print(f"Failed to connect or execute: {e}")
+
+if __name__ == "__main__":
+    asyncio.run(main())

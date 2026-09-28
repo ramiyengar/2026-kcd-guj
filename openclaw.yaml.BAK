@@ -1,0 +1,14 @@
+apiVersion: openclaw.rocks/v1alpha1
+kind: OpenClawInstance
+metadata:
+  name: local-agent
+  namespace: openclaw
+spec:
+  persistence:
+    enabled: true
+    size: 10Gi
+  env:
+    - name: OLLAMA_BASE_URL
+      value: "http://ollama-service.openclaw.svc.cluster.local:11434"
+    - name: MODEL_NAME
+      value: "llama3"

@@ -1,0 +1,51 @@
+import asyncio
+from mcp import ClientSession
+from mcp.client.sse import sse_client
+
+async def main():
+    # Replace with your OpenCost server URL and specific SSE endpoint path.
+    # The default port is 8081, and MCP servers often use /sse for the stream.
+    server_url = "http://localhost:8081" 
+    
+    print(f"Connecting to OpenCost MCP server at {server_url}...")
+
+    try:
+        # 1. Establish the SSE transport connection
+        async with sse_client(url=server_url) as streams:
+            
+            # 2. Create and initialize the client session
+            async with ClientSession(*streams) as session:
+                await session.initialize()
+                print("Session initialized successfully!\n")
+                
+                # 3. Discover available OpenCost tools
+                print("Fetching available tools...")
+                tools_response = await session.list_tools()
+                
+                for tool in tools_response.tools:
+                    print(f"- {tool.name}: {tool.description}")
+                
+                print("\nExecuting tool: get_allocation_costs")
+                
+                # 4. Call a specific OpenCost tool 
+                # (Pass the expected arguments defined by the tool's input schema)
+                cost_result = await session.call_tool(
+                    "get_allocation_costs", 
+                    {
+                        "window": "7d", 
+                        "aggregate": "namespace"
+                    }
+                )
+                
+                # 5. Output the result
+                print("\nCost Result:")
+                for content in cost_result.content:
+                    # MCP content objects usually contain text or JSON payload
+                    print(content.text)
+
+    except Exception as e:
+        print(f"Failed to connect or execute: {e}")
+
+if __name__ == "__main__":
+    # Run the async event loop
+    asyncio.run(main())

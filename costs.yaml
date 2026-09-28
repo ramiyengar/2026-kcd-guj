@@ -1,0 +1,14 @@
+opencost:
+  customPricing:
+    enabled: true
+    provider: "custom"
+    costModel:
+      description: "Local KiND Cluster Pricing"
+      currencyCode: "INR"
+      CPU: 150.00
+      spotCPU: 50.00
+      RAM: 40.00
+      spotRAM: 15.00
+      storage: 10.00
+      GPU: 1500.00
+      spotGPU: 1500.00

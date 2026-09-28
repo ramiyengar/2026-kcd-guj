@@ -1,0 +1,13 @@
+apiVersion: openclaw.rocks/v1alpha1
+kind: OpenClawInstance
+metadata:
+  name: local-agent
+  namespace: openclaw
+spec:
+  env:
+    - name: OPENAI_BASE_URL
+      value: "http://ollama-service.openclaw.svc.cluster.local:11434/v1"
+    - name: OPENAI_API_KEY
+      value: "ollama-local-bypass"
+    - name: MODEL_NAME
+      value: "gemma4:e4b"

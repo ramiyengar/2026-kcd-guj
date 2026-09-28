@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stress-generator
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stress
+  template:
+    metadata:
+      labels:
+        app: stress
+    spec:
+      containers:
+      - name: stress-ng
+        image: alexeiled/stress-ng
+        args: ["--cpu", "2", "--vm", "1", "--vm-bytes", "256M"]
+        resources:
+          requests:
+            cpu: "1"
+            memory: "500Mi"
+          limits:
+            cpu: "2"
+            memory: "1Gi"
