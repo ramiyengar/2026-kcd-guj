@@ -5,5 +5,5 @@ metadata:
   namespace: openclaw
 type: Opaque
 stringData:
-  GEMINI_API_KEY: "AQ.Ab8RN6L2kXHGCCwTySe9YRrR2dLKq8fIdZBVAryEXXvH9Vyz5A"
-  GOOGLE_API_KEY: "AQ.Ab8RN6L2kXHGCCwTySe9YRrR2dLKq8fIdZBVAryEXXvH9Vyz5A"
+  GEMINI_API_KEY: "<insert-api-key-here>"
+  GOOGLE_API_KEY: "<insert-api-key-here>"
